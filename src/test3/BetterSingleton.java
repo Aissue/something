@@ -7,19 +7,45 @@ package test3;
  * 类级内部类
  */
 public class BetterSingleton {
+    private String name = null;
+
+    static {
+        System.out.println("static-black is running...");
+    }
+
+    BetterSingleton(String name){
+        this.name = name;
+    }
+
     private static class SingletonHolder{
+        SingletonHolder(){
+            System.out.println("SingletonHolder is running...");
+        }
         /**
          * 静态初始化器，由JVM来保证线程安全
          */
-        private static BetterSingleton instance = new BetterSingleton();
+        private static BetterSingleton instance = new BetterSingleton("abc");
 
     }
 
-    public static BetterSingleton getInstance(){
+    private static BetterSingleton getInstance(){
         /**
          * 类级内部类相当于其外部类的成员，
          * 只有在第一次被使用的时候才被会装载。
          */
         return SingletonHolder.instance;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    public static void main(String[] args) {
+        /*BetterSingleton b = new BetterSingleton("def");
+        BetterSingleton c = new BetterSingleton("def");*/
+        /*System.out.println(BetterSingleton.getInstance());
+        System.out.println(BetterSingleton.getInstance());*/
+
     }
 }
