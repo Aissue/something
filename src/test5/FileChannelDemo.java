@@ -2,6 +2,8 @@ package test5;
 
 import org.junit.Test;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -17,8 +19,21 @@ public class FileChannelDemo {
     @Test
     public void test1(){
         try {
-            FileChannel inChannel = FileChannel.open(Paths.get("src/test5/a.txt"), StandardOpenOption.READ);
-            FileChannel outChannel = FileChannel.open(Paths.get("src/test5/b.txt"),StandardOpenOption.WRITE);
+            /**
+             * 1、获取Channel的一种方式
+             */
+            //FileChannel inChannel = FileChannel.open(Paths.get("src/test5/a.txt"), StandardOpenOption.READ);
+            //FileChannel outChannel = FileChannel.open(Paths.get("src/test5/b.txt"),StandardOpenOption.WRITE);
+
+            /**
+             * 2、获取Channel的另一种方式
+             * 通过这种方式可以实现文本追加
+             */
+            FileInputStream fis = new FileInputStream("src/test5/a.txt");
+            FileChannel inChannel = fis.getChannel();
+            FileOutputStream fos = new FileOutputStream("src/test5/b.txt",true);
+            FileChannel outChannel = fos.getChannel();
+
             ByteBuffer buf = ByteBuffer.allocate(24);
             /**
              * Reads a sequence of bytes from this channel into the given buffer.
