@@ -10,5 +10,7 @@ public class branchDemo {
         System.out.println("git branch test2!");
 
         System.out.println("git master!");
+
+        System.out.println("git branch!");
     }
 }
