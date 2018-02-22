@@ -26,6 +26,7 @@ public class JMSProducter {
      */
     public static void sendMessage(Session session, MessageProducer messageProducer) throws Exception{
         for(int i=0;i<JMSProducter.SENDNUM;i++){
+            //创建一条消息，当然，消息的类型有很多，如文字，字节，对象等,可以通过session.create..方法来创建出来
             TextMessage message = session.createTextMessage("ActiveMq 发送消息"+i);
             System.out.println("发送消息：Activemq 发送消息" + i);
             messageProducer.send(message);
@@ -51,12 +52,21 @@ public class JMSProducter {
             connection = connectionFactory.createConnection();
             //启动连接
             connection.start();
-            //创建session
+            // 创建Session会话
+            // 参数1:是否开启事务,如果为true，则会忽略第二个参数，被jms服务器设置为SESSION_TRANSACTED
+            // 参数2:会话Session
+            //  Session.AUTO_ACKNOWLEDGE - 自动确认 消费者从receive或监听成功返回时,自动确认客户端收到消息
+            //  Session.CLIENT_ACKNOWLEDGE - 客户通过acknowledge方法确认消息(会话层确认),确认一个即确认所有
+            //  Session.DUPS_OK_ACKNOWLEDGE - 重复确认
             session = connection.createSession(true,Session.AUTO_ACKNOWLEDGE);
             //创建一个名为helloworld的消息队列
             destination = session.createQueue("HelloWorld");
             //创建消息生产者
             messageProducer = session.createProducer(destination);
+            //设置生产者的模式，有两种可选
+            //DeliveryMode.PERSISTENT 当activemq关闭的时候，队列数据将会被保存
+            //DeliveryMode.NON_PERSISTENT 当activemq关闭的时候，队列里面的数据将会被清空
+            messageProducer.setDeliveryMode(DeliveryMode.PERSISTENT);
             sendMessage(session,messageProducer);
 
             session.commit();
