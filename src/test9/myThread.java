@@ -1,5 +1,7 @@
 package test9;
 
+import org.apache.activemq.util.ThreadTracker;
+
 /**
  * Created by Administrator on 2018/2/11.
  */
@@ -14,12 +16,14 @@ public class myThread implements Runnable{
         return "得到的数是："+count;
     }
 
-    public synchronized void test1(){
+    public synchronized void test1() throws InterruptedException {
         System.out.println(Thread.currentThread().getName()+"我是加锁的方法1");
+        Thread.sleep(5000);
     }
 
-    public synchronized void test2(){
+    public synchronized void test2() throws InterruptedException {
         System.out.println(Thread.currentThread().getName()+"我是加锁的方法2");
+        Thread.sleep(5000);
     }
 
     @Override
