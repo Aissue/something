@@ -18,6 +18,9 @@ public class Main {
         list.removeIf(new Predicate<Object >() {
             @Override
             public boolean test(Object s) {
+                String tmp = (String)s;
+                if(tmp.startsWith("a"))
+                    return true;
                 return false;
             }
         });
