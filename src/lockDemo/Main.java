@@ -1,10 +1,10 @@
 package lockDemo;
 
-import org.apache.activemq.leveldb.DelayableUOW;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -19,26 +19,44 @@ public class Main {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("1 is waiting...");
-                insert(Thread.currentThread());
+                System.out.println("a is waiting...");
+                insert1(Thread.currentThread());
             }
-        }).start();
+        },"a").start();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("2 is waiting...");
-                insert(Thread.currentThread());
+                System.out.println("b is waiting...");
+                insert1(Thread.currentThread());
             }
-        }).start();
+        },"b").start();
 
-        Thread.sleep(5000l);
+        Thread.sleep(2000l);
     }
 
-    public void insert(Thread thread){
-        System.out.println(thread.getName()+" is waiting...");
+    @Test
+    public void test2() throws InterruptedException {
+        for(int i=0;i<5;i++){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        insert2(Thread.currentThread());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            },"thread["+i+"]").start();
+        }
+        Thread.sleep(10000l);
+
+    }
+
+    public void insert1(Thread thread){
+        //方式1、直接加锁
         lock.lock();
-        System.out.println(thread.getName()+ " is running...");
         try {
             System.out.println(thread.getName()+" getting lock...");
             for(int i=0;i<5;i++){
@@ -51,4 +69,27 @@ public class Main {
             System.out.println(thread.getName()+" releasing lock...");
         }
     }
+
+    public void insert2(Thread thread) throws InterruptedException {
+        //方式2、试着加锁，若加锁成功，则进行处理，否则直接退出，不再等待
+//        if(lock.tryLock()){
+        if(lock.tryLock(1, TimeUnit.SECONDS)){
+            try {
+                Thread.sleep(100l);
+                System.out.println(thread.getName()+" getting lock...");
+                for(int i=0;i<5;i++){
+                    list.add(i);
+                }
+            }catch (Exception e){
+
+            }finally {
+                lock.unlock();
+                System.out.println(thread.getName()+" releasing lock...");
+            }
+        }else{
+            System.out.println(thread.getName()+" get lock rejecked...");
+        }
+
+    }
+
 }
