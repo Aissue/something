@@ -19,6 +19,8 @@ public class Main {
                 public void run() {
                     try{
                         semaphore.acquire();
+                        System.out.println(Thread.currentThread().getName());
+                        Thread.sleep(3000);
 
                     }catch (Exception e){
 

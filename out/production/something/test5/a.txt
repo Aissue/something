@@ -1,3 +1,0 @@
-test FileChannel
-NIO is very important!
-learn it hard!
