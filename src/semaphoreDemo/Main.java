@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import java.util.concurrent.*;
 
+/**
+ * 信号量，可以控制并发数量
+ */
 public class Main {
     @Test
     public void test1(){
