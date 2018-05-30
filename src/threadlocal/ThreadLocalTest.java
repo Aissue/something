@@ -19,9 +19,7 @@ public class ThreadLocalTest {
 
     public Integer getNext(){
         Integer integer = threadLocal.get();
-        //System.out.println(integer);
         threadLocal.set(++integer);
-        //System.out.println(threadLocal.get());
         return threadLocal.get();
     }
 
