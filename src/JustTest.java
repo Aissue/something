@@ -10,4 +10,9 @@ public class JustTest {
     public void test2(){
 
     }
+
+    @Test
+    public void test3(){
+
+    }
 }
