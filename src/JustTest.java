@@ -5,4 +5,9 @@ public class JustTest {
     public void test1(){
         System.out.println(System.currentTimeMillis());
     }
+
+    @Test
+    public void test2(){
+
+    }
 }
