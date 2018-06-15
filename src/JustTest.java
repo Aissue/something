@@ -18,7 +18,7 @@ public class JustTest {
 
     @Test
     public void test4(){
-
+        System.out.println("this is test4...");
     }
 
     @Test
